@@ -13,7 +13,6 @@ import styles from "../index.module.less";
 const LANGUAGE_OPTIONS = [
   { value: "zh", label: "中文" },
   { value: "en", label: "English" },
-  { value: "ru", label: "Русский" },
 ];
 
 const MEMORY_MANAGER_BACKEND_OPTIONS = [

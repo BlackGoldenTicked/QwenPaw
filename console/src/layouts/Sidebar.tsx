@@ -15,10 +15,6 @@ import { useAppMessage } from "../hooks/useAppMessage";
 import AgentSelector from "../components/AgentSelector";
 import {
   SparkChatTabFill,
-  SparkWifiLine,
-  SparkUserGroupLine,
-  SparkDateLine,
-  SparkVoiceChat01Line,
   SparkMagicWandLine,
   SparkLocalFileLine,
   SparkModePlazaLine,
@@ -77,7 +73,7 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
     authApi
       .getStatus()
       .then((res) => setAuthEnabled(res.enabled))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // ── Handlers ──────────────────────────────────────────────────────────────
@@ -145,30 +141,6 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
       label: t("nav.chat"),
     },
     {
-      key: "channels",
-      icon: <SparkWifiLine size={18} />,
-      path: "/channels",
-      label: t("nav.channels"),
-    },
-    {
-      key: "sessions",
-      icon: <SparkUserGroupLine size={18} />,
-      path: "/sessions",
-      label: t("nav.sessions"),
-    },
-    {
-      key: "cron-jobs",
-      icon: <SparkDateLine size={18} />,
-      path: "/cron-jobs",
-      label: t("nav.cronJobs"),
-    },
-    {
-      key: "heartbeat",
-      icon: <SparkVoiceChat01Line size={18} />,
-      path: "/heartbeat",
-      label: t("nav.heartbeat"),
-    },
-    {
       key: "workspace",
       icon: <SparkLocalFileLine size={18} />,
       path: "/workspace",
@@ -211,28 +183,10 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
       label: t("nav.agentConfig"),
     },
     {
-      key: "agents",
-      icon: <SparkAgentLine size={18} />,
-      path: "/agents",
-      label: t("nav.agents"),
-    },
-    {
       key: "models",
       icon: <SparkModePlazaLine size={18} />,
       path: "/models",
       label: t("nav.models"),
-    },
-    {
-      key: "environments",
-      icon: <SparkInternetLine size={18} />,
-      path: "/environments",
-      label: t("nav.environments"),
-    },
-    {
-      key: "security",
-      icon: <SparkBrowseLine size={18} />,
-      path: "/security",
-      label: t("nav.security"),
     },
     {
       key: "token-usage",
@@ -280,32 +234,6 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
       key: "chat",
       label: collapsed ? null : t("nav.chat"),
       icon: <SparkChatTabFill size={16} />,
-    },
-    {
-      key: "control-group",
-      label: collapsed ? null : t("nav.control"),
-      children: [
-        {
-          key: "channels",
-          label: collapsed ? null : t("nav.channels"),
-          icon: <SparkWifiLine size={16} />,
-        },
-        {
-          key: "sessions",
-          label: collapsed ? null : t("nav.sessions"),
-          icon: <SparkUserGroupLine size={16} />,
-        },
-        {
-          key: "cron-jobs",
-          label: collapsed ? null : t("nav.cronJobs"),
-          icon: <SparkDateLine size={16} />,
-        },
-        {
-          key: "heartbeat",
-          label: collapsed ? null : t("nav.heartbeat"),
-          icon: <SparkVoiceChat01Line size={16} />,
-        },
-      ],
     },
     {
       key: "agent-group",
@@ -424,9 +352,8 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
   return (
     <Sider
       width={collapsed ? 72 : 240}
-      className={`${styles.sider}${
-        collapsed ? ` ${styles.siderCollapsed}` : ""
-      }${isDark ? ` ${styles.siderDark}` : ""}`}
+      className={`${styles.sider}${collapsed ? ` ${styles.siderCollapsed}` : ""
+        }${isDark ? ` ${styles.siderDark}` : ""}`}
     >
       {collapsed ? (
         <nav className={styles.collapsedNav}>
@@ -443,9 +370,8 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
                 }}
               >
                 <button
-                  className={`${styles.collapsedNavItem} ${
-                    isActive ? styles.collapsedNavItemActive : ""
-                  }`}
+                  className={`${styles.collapsedNavItem} ${isActive ? styles.collapsedNavItemActive : ""
+                    }`}
                   onClick={() => navigate(item.path)}
                 >
                   {item.icon}
@@ -504,9 +430,8 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
               setAccountModalOpen(true);
             }}
             block
-            className={`${styles.authBtn} ${
-              collapsed ? styles.authBtnCollapsed : ""
-            }`}
+            className={`${styles.authBtn} ${collapsed ? styles.authBtnCollapsed : ""
+              }`}
           >
             {!collapsed && t("account.title")}
           </Button>
@@ -518,9 +443,8 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
               window.location.href = "/login";
             }}
             block
-            className={`${styles.authBtn} ${
-              collapsed ? styles.authBtnCollapsed : ""
-            }`}
+            className={`${styles.authBtn} ${collapsed ? styles.authBtnCollapsed : ""
+              }`}
           >
             {!collapsed && t("login.logout")}
           </Button>
