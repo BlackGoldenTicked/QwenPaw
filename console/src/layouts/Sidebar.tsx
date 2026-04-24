@@ -18,27 +18,18 @@ import {
   SparkMagicWandLine,
   SparkLocalFileLine,
   SparkModePlazaLine,
-  SparkInternetLine,
   SparkModifyLine,
-  SparkBrowseLine,
   SparkMcpMcpLine,
   SparkScanLine,
   SparkToolLine,
   SparkDataLine,
-  SparkMicLine,
-  SparkAgentLine,
   SparkExitFullscreenLine,
   SparkSearchUserLine,
   SparkMenuExpandLine,
   SparkMenuFoldLine,
-  SparkOtherLine,
-  SparkBarChartLine,
-  SparkDebugLine,
-  SparkSaveLine,
 } from "@agentscope-ai/icons";
 import { clearAuthToken } from "../api/config";
 import { authApi } from "../api/modules/auth";
-import { usePlugins } from "../plugins/PluginContext";
 import styles from "./index.module.less";
 import { useTheme } from "../contexts/ThemeContext";
 import { KEY_TO_PATH, DEFAULT_OPEN_KEYS } from "./constants";
@@ -60,7 +51,6 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
   const { t } = useTranslation();
   const { message } = useAppMessage();
   const { isDark } = useTheme();
-  const { pluginRoutes } = usePlugins();
   const [authEnabled, setAuthEnabled] = useState(false);
   const [accountModalOpen, setAccountModalOpen] = useState(false);
   const [accountLoading, setAccountLoading] = useState(false);
@@ -153,12 +143,6 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
       label: t("nav.skills"),
     },
     {
-      key: "skill-pool",
-      icon: <SparkOtherLine size={18} />,
-      path: "/skill-pool",
-      label: t("nav.skillPool", "Skill Pool"),
-    },
-    {
       key: "tools",
       icon: <SparkToolLine size={18} />,
       path: "/tools",
@@ -194,37 +178,6 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
       path: "/token-usage",
       label: t("nav.tokenUsage"),
     },
-    {
-      key: "agent-stats",
-      icon: <SparkBarChartLine size={18} />,
-      path: "/agent-stats",
-      label: t("nav.agentStats"),
-    },
-    {
-      key: "backups",
-      icon: <SparkSaveLine size={18} />,
-      path: "/backups",
-      label: t("nav.backups"),
-    },
-    {
-      key: "voice-transcription",
-      icon: <SparkMicLine size={18} />,
-      path: "/voice-transcription",
-      label: t("nav.voiceTranscription"),
-    },
-    {
-      key: "debug",
-      icon: <SparkDebugLine size={18} />,
-      path: "/debug",
-      label: t("nav.debug", "Debug"),
-    },
-    // Append plugin nav items dynamically
-    ...pluginRoutes.map((route) => ({
-      key: route.path.replace(/^\//, ""),
-      icon: <span style={{ fontSize: 18 }}>{route.icon}</span>,
-      path: route.path,
-      label: route.label,
-    })),
   ];
 
   // ── Menu items — agent-scoped (Chat + Control + Workspace) ──────────────
@@ -281,71 +234,18 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
       label: collapsed ? null : t("nav.settings"),
       children: [
         {
-          key: "agents",
-          label: collapsed ? null : t("nav.agents"),
-          icon: <SparkAgentLine size={16} />,
-        },
-        {
           key: "models",
           label: collapsed ? null : t("nav.models"),
           icon: <SparkModePlazaLine size={16} />,
-        },
-        {
-          key: "skill-pool",
-          label: collapsed ? null : t("nav.skillPool", "Skill Pool"),
-          icon: <SparkOtherLine size={16} />,
-        },
-        {
-          key: "environments",
-          label: collapsed ? null : t("nav.environments"),
-          icon: <SparkInternetLine size={16} />,
-        },
-        {
-          key: "security",
-          label: collapsed ? null : t("nav.security"),
-          icon: <SparkBrowseLine size={16} />,
         },
         {
           key: "token-usage",
           label: collapsed ? null : t("nav.tokenUsage"),
           icon: <SparkDataLine size={16} />,
         },
-        {
-          key: "agent-stats",
-          label: collapsed ? null : t("nav.agentStats"),
-          icon: <SparkBarChartLine size={16} />,
-        },
-        {
-          key: "backups",
-          label: collapsed ? null : t("nav.backups"),
-          icon: <SparkSaveLine size={16} />,
-        },
-        {
-          key: "voice-transcription",
-          label: collapsed ? null : t("nav.voiceTranscription"),
-          icon: <SparkMicLine size={16} />,
-        },
-        {
-          key: "debug",
-          label: collapsed ? null : t("nav.debug", "Debug"),
-          icon: <SparkDebugLine size={16} />,
-        },
       ],
     },
   ];
-
-  // Append plugin menu items as a group (only when there are plugins)
-  if (pluginRoutes.length > 0) {
-    settingsMenuItems.push({
-      key: "plugins-group",
-      label: collapsed ? null : t("nav.plugins"),
-      children: pluginRoutes.map((route) => ({
-        key: route.path.replace(/^\//, ""),
-        label: collapsed ? null : route.label,
-        icon: <span style={{ fontSize: 16 }}>{route.icon}</span>,
-      })),
-    } as any);
-  }
 
   // ── Render ────────────────────────────────────────────────────────────────
 
@@ -405,10 +305,7 @@ export default function Sidebar({ selectedKey }: SidebarProps) {
           <Menu
             mode="inline"
             selectedKeys={[selectedKey]}
-            openKeys={[
-              ...DEFAULT_OPEN_KEYS,
-              ...(pluginRoutes.length > 0 ? ["plugins-group"] : []),
-            ]}
+            openKeys={DEFAULT_OPEN_KEYS}
             onClick={({ key }) => {
               const path = KEY_TO_PATH[String(key)] ?? `/${String(key)}`;
               navigate(path);
