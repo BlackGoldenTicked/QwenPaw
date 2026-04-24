@@ -1,4 +1,4 @@
-import { Layout, Space, Badge, Spin, Tooltip } from "antd";
+import { Layout, Space, Badge, Spin } from "antd";
 import LanguageSwitcher from "../components/LanguageSwitcher/index";
 import ThemeToggleButton from "../components/ThemeToggleButton";
 import { useTranslation } from "react-i18next";
@@ -6,9 +6,6 @@ import { Button, Modal } from "@agentscope-ai/design";
 import styles from "./index.module.less";
 import api from "../api";
 import {
-  GITHUB_URL,
-  getDocsUrl,
-  getFaqUrl,
   getReleaseNotesUrl,
   PYPI_URL,
   ONE_HOUR_MS,
@@ -37,9 +34,8 @@ function UpdateCodeBlock({ code }: { code: string }) {
     <div className={styles.codeBlock}>
       <code className={styles.codeBlockInner}>{code}</code>
       <button
-        className={`${styles.copyBtn} ${
-          copied ? styles.copyBtnCopied : styles.copyBtnDefault
-        }`}
+        className={`${styles.copyBtn} ${copied ? styles.copyBtnCopied : styles.copyBtnDefault
+          }`}
         onClick={handleCopy}
         title="Copy"
       >
@@ -61,7 +57,7 @@ export default function Header() {
     api
       .getVersion()
       .then((res) => setVersion(res?.version ?? ""))
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   useEffect(() => {
@@ -105,7 +101,7 @@ export default function Header() {
           setLatestVersion("");
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const hasUpdate =
@@ -117,8 +113,8 @@ export default function Header() {
     const lang = i18n.language?.startsWith("zh")
       ? "zh"
       : i18n.language?.startsWith("ru")
-      ? "ru"
-      : "en";
+        ? "ru"
+        : "en";
     const faqLang = lang === "zh" ? "zh" : "en";
     const url = `https://qwenpaw.agentscope.io/docs/faq.${faqLang}.md`;
     fetch(url, { cache: "no-cache" })
@@ -170,11 +166,10 @@ export default function Header() {
               offset={[4, 28]}
             >
               <span
-                className={`${styles.versionBadge} ${
-                  hasUpdate
+                className={`${styles.versionBadge} ${hasUpdate
                     ? styles.versionBadgeClickable
                     : styles.versionBadgeDefault
-                }`}
+                  }`}
                 onClick={() => hasUpdate && handleOpenUpdateModal()}
               >
                 v{version}
@@ -183,36 +178,6 @@ export default function Header() {
           )}
         </div>
         <Space size="middle">
-          <Tooltip title={t("header.changelog")}>
-            <Button
-              type="text"
-              onClick={() => handleNavClick(getReleaseNotesUrl(i18n.language))}
-            >
-              {t("header.changelog")}
-            </Button>
-          </Tooltip>
-          <Tooltip title={t("header.docs")}>
-            <Button
-              type="text"
-              onClick={() => handleNavClick(getDocsUrl(i18n.language))}
-            >
-              {t("header.docs")}
-            </Button>
-          </Tooltip>
-          <Tooltip title={t("header.faq")}>
-            <Button
-              type="text"
-              onClick={() => handleNavClick(getFaqUrl(i18n.language))}
-            >
-              {t("header.faq")}
-            </Button>
-          </Tooltip>
-          <Tooltip title={t("header.github")}>
-            <Button type="text" onClick={() => handleNavClick(GITHUB_URL)}>
-              {t("header.github")}
-            </Button>
-          </Tooltip>
-          <div className={styles.headerDivider} />
           <LanguageSwitcher />
           <ThemeToggleButton />
         </Space>
