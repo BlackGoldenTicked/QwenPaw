@@ -89,7 +89,14 @@ jobs:
           path: dist/QwenPaw-Setup-*.exe
 
   build-macos:
-    runs-on: macos-14
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: macos-14
+            arch: arm64
+          - os: macos-13
+            arch: intel
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -126,11 +133,17 @@ jobs:
           chmod +x scripts/pack/build_macos.sh
           conda run -n qwenpaw-build bash -c 'CREATE_ZIP=1 ./scripts/pack/build_macos.sh'
 
+      - name: Rename zip for architecture
+        run: |
+          for f in dist/QwenPaw-*.zip; do
+            mv "$f" "${f%.zip}-${{ matrix.arch }}.zip"
+          done
+
       - name: Upload macOS artifact
         uses: actions/upload-artifact@v4
         with:
-          name: QwenPaw-Desktop-macOS-${{ steps.version.outputs.version }}
-          path: dist/QwenPaw-*.zip
+          name: QwenPaw-Desktop-macOS-${{ matrix.arch }}-${{ steps.version.outputs.version }}
+          path: dist/QwenPaw-*-${{ matrix.arch }}.zip
 
   upload-release:
     needs: [build-windows, build-macos]
@@ -145,14 +158,14 @@ jobs:
       - name: Move artifacts to root for upload
         run: |
           mv QwenPaw-Desktop-Windows-*/QwenPaw-Setup-*.exe . 2>/dev/null || true
-          mv QwenPaw-Desktop-macOS-*/QwenPaw-*.zip . 2>/dev/null || true
+          mv QwenPaw-Desktop-macOS-*/*.zip . 2>/dev/null || true
 
       - name: Upload to Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
             QwenPaw-Setup-*.exe
-            QwenPaw-*-macOS.zip
+            QwenPaw-*.zip
           fail-on-unmatched-files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
